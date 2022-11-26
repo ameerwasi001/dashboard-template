@@ -13,14 +13,14 @@ const emitter = Emitter.get()
 
 const DisputeList = () => {
 
-  const [disputes, setDisputes] = useState([])
+  const [disputes, setDisputes] = useState(null)
   let user = null
 
   useEffect(() => {
     fetch(`${env.url}/admin/account/user/disputes`)
       .then(res => res.json())
       .then(disputes => setDisputes(disputes.data))
-    emitter.on('user', u => console.log("()>", user = u))
+    emitter.on('user', u => user = u)
   }, [])
 
   return <div><p>{}</p>

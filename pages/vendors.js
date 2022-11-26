@@ -10,7 +10,7 @@ import env from '../env'
 
 const CustomerList = () => {
 
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState(null)
 
   useEffect(() => {
     fetch(`${env.url}/admin/account/user/allVendors`)

@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import styles from '../styles/Home.module.css'
 import { doAuth, doLogout } from '../auth'
+import Loading from './loading'
 import { useRouter } from 'next/router'
 const { Emitter } = require('../emitter')
 
@@ -12,9 +13,8 @@ export default function Layout(title, menuItems, content) {
   const [user, setUser] = useState({})
   const [refresh, setRefresh] = useState(false)
   const [isOpen, setIsopen] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
-
-  const userRefList = []
 
   const ToggleSidebar = () => setIsopen(!isOpen)
   let first = true
@@ -28,6 +28,10 @@ export default function Layout(title, menuItems, content) {
     }, [refresh])
 
     useEffect(() => { emitter.emit('user', user) }, [user])
+
+    emitter.on('loaded', () => {
+        setIsLoading(false)
+    })
 
     useEffect(
         () => {
@@ -45,7 +49,7 @@ export default function Layout(title, menuItems, content) {
         []
     )
 
-  return <div className='container-fluid' style={{background: "black", paddingLeft: 0, paddingRight: 0, minHeight: "100vh", width: "100vw", color: "whitesmoke"}}>
+    return <div className='container-fluid' style={{background: "black", paddingLeft: 0, paddingRight: 0, minHeight: "100vh", width: "100vw", color: "whitesmoke"}}>
     <div className="container-fluid" style={{padding: 0}}>
         <nav className="navbar navbar-expand-lg navbar-light shadow-md" style={{borderRadius: "0", background: "#333", color: "white"}}>
             <div className="container-fluid p-2">
@@ -88,20 +92,15 @@ export default function Layout(title, menuItems, content) {
             </div>
         </div>
         <div className={`sidebar-overlay ${isOpen == true ? 'active' : ''}`} onClick={ToggleSidebar}></div>
-       </div>
-    {/* <div className="row" style={{width: "100vw", height: "10%", background: "#333", justifyContent: "end"}}>
-        <div className="d-flex" style={{width: "50%", alignItems: "center"}}>
-            <img src='/menu.png'/>
-            <div class="m-2"></div>
-            <h3>{title}</h3>
         </div>
-        <div className='d-flex' style={{width: "50%", justifyContent: "end", alignItems: "center", alignContent: "center"}}>
-            <img className='rounded-circle' style={{width: "50px", height: "50px"}} src={user.profilePicture}></img>
-            <div className='m-2'></div>
-            <div>{user.fullname}</div>
-        </div>
-    </div> */}
     <br/>
-    {content}
-  </div>
+    { isLoading ? <div className='d-flex justify-content-center align-items-center' style={{ height: '80vh' }}>
+        <div className="loading">
+            <div></div>
+            <div></div>
+        </div>
+        <div className='d-none'>{content}</div>
+    </div> : 
+    content }
+    </div>
 }

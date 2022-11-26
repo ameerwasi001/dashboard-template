@@ -6,6 +6,7 @@ import { doAuth, doLogout } from '../auth'
 import {useRouter} from 'next/router'
 import Dashboard from '../layouts/main'
 import { Emitter } from '../emitter'
+import { Loading } from './loading'
 
 const emitter = Emitter.get()
 
@@ -17,7 +18,7 @@ export const TableView = ({listingType, fields, data, accessors}) => {
     setUsers(data)
     emitter.on('filter', (f) => {
       setFilter(() => d => f(d))
-    })
+    })  
   }, [])
 
   useEffect(() => {
@@ -25,10 +26,14 @@ export const TableView = ({listingType, fields, data, accessors}) => {
   }, [data])
 
   useEffect(() => {
-    setUsers(users.filter(filter))
+    if(users !== null) setUsers(users.filter(filter))
   }, [filter])
 
-  let i = 0
+  useEffect(() => {
+    if(users !== null) emitter.emit('loaded')
+  }, [users])
+
+  if(users === null) return 
   return <div className="d-flex justify-content-center" style={{width: "100vw"}} key={users}>
     <div className="table-responsive" style={{width: "80vw"}}>
       <table className="table">
