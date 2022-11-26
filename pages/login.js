@@ -1,12 +1,14 @@
 import { useState } from "react"
 import {useRouter} from 'next/router'
-import { doAuth } from '../auth'
+import { doAuth, getToken } from '../auth'
 
 export default function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [err, setErr] = useState('')
     const router = useRouter()
+
+    if(typeof window !== 'undefined' && getToken()) router.push('/')
 
     return <body style={{"background": "black"}}>
         <section style={{'backgroundColor': "black", height: "100vh"}}>

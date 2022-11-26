@@ -21,8 +21,8 @@ export default function Layout(title, menuItems, content) {
   useEffect(
     () => {
       doAuth().then(user => {
-        setUser(user, () => emitter.emit('user', user))
-        if(!user) router.push('/login')
+        setUser(user)
+        if(!user._id) router.push('/login')
       })
       
     }, [refresh])
