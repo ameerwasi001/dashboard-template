@@ -7,6 +7,7 @@ import {useRouter} from 'next/router'
 import Dashboard from '../layouts/main'
 import Table from '../layouts/table'
 import { Emitter } from '../emitter'
+import env from '../env'
 
 const emitter = Emitter.get()
 
@@ -16,7 +17,7 @@ const DisputeList = () => {
   let user = null
 
   useEffect(() => {
-    fetch('http://localhost:5000/admin/account/user/disputes')
+    fetch(`${env.url}/admin/account/user/disputes`)
       .then(res => res.json())
       .then(disputes => setDisputes(disputes.data))
     emitter.on('user', u => console.log("()>", user = u))
@@ -30,11 +31,11 @@ const DisputeList = () => {
         a => a.reciever.fullname,
         a => a.reciever.phone, 
         a => <button className='btn btn-danger' onClick={() =>
-            fetch(`http://localhost:5000/admin/account/handled/${a._id}`, { method: "POST", headers: { Authorization: getToken() } })
+            fetch(`${env.url}/admin/account/handled/${a._id}`, { method: "POST", headers: { Authorization: getToken() } })
                 .then(_ => emitter.emit('filter', dis => dis._id != a._id))
         }>Cancel</button>,
         a => <button className='btn btn-danger' onClick={() =>
-            fetch(`http://localhost:5000/provider/service/refund/${a._id}`, { method: "POST", headers: { Authorization: getToken() } })
+            fetch(`${env.url}/provider/service/refund/${a._id}`, { method: "POST", headers: { Authorization: getToken() } })
                 .then(_ => emitter.emit('filter', dis => dis._id != a._id))
         }>Refund</button>
     ])}

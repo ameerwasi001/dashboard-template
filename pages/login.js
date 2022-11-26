@@ -1,6 +1,7 @@
 import { useState } from "react"
 import {useRouter} from 'next/router'
 import { doAuth, getToken } from '../auth'
+import env from '../env'
 
 export default function Login() {
     const [email, setEmail] = useState('')
@@ -49,7 +50,7 @@ export default function Login() {
                             }
                             <div className="pt-1 mb-4">
                                 <button className="btn btn-dark btn-lg btn-block" style={{ "background": "black", "border": "1px solid white", "borderRadius": "5px" }} type="button" onClick={() => {
-                                    fetch('http://localhost:5000/admin/account/login', {
+                                    fetch(`${env.url}/admin/account/login`, {
                                             method: 'POST',
                                             body: JSON.stringify({ email, password }),
                                             headers: {'Content-Type': 'application/json'},

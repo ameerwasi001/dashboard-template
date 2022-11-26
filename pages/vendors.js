@@ -6,13 +6,14 @@ import { doAuth, doLogout } from '../auth'
 import {useRouter} from 'next/router'
 import Dashboard from '../layouts/main'
 import Table from '../layouts/table'
+import env from '../env'
 
 const CustomerList = () => {
 
   const [users, setUsers] = useState([])
 
   useEffect(() => {
-    fetch('http://localhost:5000/admin/account/user/allVendors')
+    fetch(`${env.url}/admin/account/user/allVendors`)
       .then(res => res.json())
       .then(users => setUsers(users.data))
   }, [])
