@@ -15,7 +15,7 @@ const CustomerList = () => {
   useEffect(() => {
     fetch(`${env.url}/admin/account/user/allCustomers`)
       .then(res => res.json())
-      .then(users => {console.log("<<=>>", users.data), setUsers(users.data)})
+      .then(users => { setUsers(users.data) })
   }, [])
 
   return <TableView
